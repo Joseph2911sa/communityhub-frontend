@@ -36,23 +36,6 @@ const { data: eventsData, pending } = await useAsyncData(
   { watch: [selectedCategory, searchText, onlyAvailable] }
 )
 const events = computed(() => eventsData.value?.data?.events ?? [])
-
-const dateFormatter = new Intl.DateTimeFormat('es-ES', {
-  day: 'numeric',
-  month: 'long',
-  timeZone: 'UTC'
-})
-const timeFormatter = new Intl.DateTimeFormat('es-ES', {
-  hour: 'numeric',
-  minute: '2-digit',
-  hour12: true,
-  timeZone: 'UTC'
-})
-
-function formatEventDateTime(dateIso: string): string {
-  const date = new Date(dateIso)
-  return `${dateFormatter.format(date)}, ${timeFormatter.format(date)}`
-}
 </script>
 
 <template>
