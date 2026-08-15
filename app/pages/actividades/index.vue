@@ -77,31 +77,7 @@ const events = computed(() => eventsData.value?.data?.events ?? [])
       </p>
 
       <div v-else class="grid">
-        <article v-for="event in events" :key="event._id" class="card">
-          <h2 class="card__title">{{ event.title }}</h2>
-          <p class="card__category">{{ event.category.name }}</p>
-
-          <dl class="card__details">
-            <div class="card__row">
-              <dt>Fecha</dt>
-              <dd>{{ formatEventDateTime(event.date) }}</dd>
-            </div>
-            <div class="card__row">
-              <dt>Lugar</dt>
-              <dd>{{ event.location }}</dd>
-            </div>
-            <div class="card__row">
-              <dt>Capacidad</dt>
-              <dd>{{ event.maxCapacity }} personas</dd>
-            </div>
-            <div class="card__row">
-              <dt>Organiza</dt>
-              <dd>{{ event.organizer.firstName }} {{ event.organizer.lastName }}</dd>
-            </div>
-          </dl>
-
-          <NuxtLink :to="`/actividades/${event._id}`" class="card__link">Ver detalle</NuxtLink>
-        </article>
+        <EventCard v-for="event in events" :key="event._id" :event="event" />
       </div>
     </template>
   </div>
@@ -169,69 +145,5 @@ const events = computed(() => eventsData.value?.data?.events ?? [])
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 1.25rem;
-}
-
-.card {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  padding: 1.25rem;
-  background-color: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-}
-
-.card__title {
-  font-size: 1.15rem;
-  color: #111827;
-}
-
-.card__category {
-  display: inline-block;
-  align-self: flex-start;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: #111827;
-  background-color: #f3f4f6;
-  padding: 0.2rem 0.6rem;
-  border-radius: 999px;
-}
-
-.card__details {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  margin: 0;
-}
-
-.card__row {
-  display: flex;
-  justify-content: space-between;
-  gap: 0.75rem;
-  font-size: 0.9rem;
-}
-
-.card__row dt {
-  color: #6b7280;
-}
-
-.card__row dd {
-  margin: 0;
-  color: #1f2937;
-  text-align: right;
-}
-
-.card__link {
-  margin-top: auto;
-  align-self: flex-start;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #111827;
-  text-decoration: none;
-  border-bottom: 1px solid #111827;
-}
-
-.card__link:hover {
-  color: #1f2937;
 }
 </style>

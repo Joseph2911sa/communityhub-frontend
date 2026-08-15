@@ -2,6 +2,10 @@
 const authStore = useAuthStore()
 const router = useRouter()
 
+const canManageEvents = computed(
+  () => authStore.user?.role === 'organizer' || authStore.user?.role === 'admin'
+)
+
 async function handleLogout() {
   await authStore.logout()
   router.push('/')
@@ -16,6 +20,12 @@ async function handleLogout() {
       <nav class="navbar__links">
         <NuxtLink to="/actividades" class="navbar__link">Actividades</NuxtLink>
         <template v-if="authStore.isAuthenticated">
+          <NuxtLink to="/mis-inscripciones" class="navbar__link">Mis inscripciones</NuxtLink>
+          <NuxtLink to="/favoritos" class="navbar__link">Favoritos</NuxtLink>
+          <NuxtLink v-if="canManageEvents" to="/mis-actividades" class="navbar__link">
+            Mis actividades
+          </NuxtLink>
+          <NuxtLink to="/perfil" class="navbar__link">Perfil</NuxtLink>
           <span class="navbar__greeting">Hola, {{ authStore.user?.firstName }}</span>
           <button class="navbar__button" type="button" @click="handleLogout">Cerrar sesión</button>
         </template>

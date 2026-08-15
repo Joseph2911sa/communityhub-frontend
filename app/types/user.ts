@@ -8,4 +8,5 @@ export interface User {
   role: UserRole
   profilePicture: string | null
   isActive: boolean
+  createdAt: string // ISO string
 }
