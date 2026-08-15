@@ -1,6 +1,10 @@
 interface ApiFetchOptions {
   method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
-  body?: Record<string, unknown>
+  // `object` en vez de `Record<string, unknown>`: así se puede pasar
+  // directamente una interfaz nombrada (ej. ActivityFormPayload) sin
+  // necesitar un cast en cada call site — un Record<string, unknown>
+  // exige firma de índice, que las interfaces nombradas no tienen.
+  body?: object
   query?: Record<string, unknown>
   headers?: Record<string, string>
 }

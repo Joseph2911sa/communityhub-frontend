@@ -42,6 +42,11 @@ const {
 
 const event = computed(() => eventData.value?.data?.event ?? null)
 
+const canEditEvent = computed(() => {
+  if (!event.value || !authStore.user) return false
+  return event.value.organizer._id === authStore.user._id || authStore.user.role === 'admin'
+})
+
 // Copia local de cupos disponibles: arranca con el valor del backend y
 // se ajusta al inscribirse/cancelar sin tener que recargar la página.
 const spotsLeft = ref<number | null>(null)
@@ -171,6 +176,9 @@ async function handleToggleFavorite() {
       <header class="header">
         <p class="header__category">{{ event.category.name }}</p>
         <h1>{{ event.title }}</h1>
+        <NuxtLink v-if="canEditEvent" :to="`/actividades/${eventId}/editar`" class="edit-link">
+          Editar esta actividad
+        </NuxtLink>
       </header>
 
       <p v-if="event.description" class="description">{{ event.description }}</p>
@@ -285,6 +293,19 @@ async function handleToggleFavorite() {
 .header h1 {
   font-size: 1.75rem;
   color: #111827;
+}
+
+.edit-link {
+  align-self: flex-start;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #111827;
+  text-decoration: none;
+  border-bottom: 1px solid #111827;
+}
+
+.edit-link:hover {
+  color: #1f2937;
 }
 
 .description {
