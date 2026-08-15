@@ -9,6 +9,7 @@ interface EventCardData {
   title: string
   category?: { name: string }
   date: string
+  time: string
   location: string
   maxCapacity?: number
   organizer?: { firstName: string; lastName: string }
@@ -27,7 +28,7 @@ defineProps<{
     <dl class="card__details">
       <div class="card__row">
         <dt>Fecha</dt>
-        <dd>{{ formatEventDateTime(event.date) }}</dd>
+        <dd>{{ formatEventDateTime(event.date, event.time) }}</dd>
       </div>
       <div class="card__row">
         <dt>Lugar</dt>

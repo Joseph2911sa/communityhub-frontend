@@ -186,7 +186,7 @@ async function handleToggleFavorite() {
       <dl class="details">
         <div class="details__row">
           <dt>Fecha</dt>
-          <dd>{{ formatEventDateTime(event.date) }}</dd>
+          <dd>{{ formatEventDateTime(event.date, event.time) }}</dd>
         </div>
         <div class="details__row">
           <dt>Lugar</dt>
