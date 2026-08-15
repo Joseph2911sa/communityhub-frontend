@@ -14,6 +14,7 @@ async function handleLogout() {
       <NuxtLink to="/" class="navbar__brand">CommunityHub</NuxtLink>
 
       <nav class="navbar__links">
+        <NuxtLink to="/actividades" class="navbar__link">Actividades</NuxtLink>
         <template v-if="authStore.isAuthenticated">
           <span class="navbar__greeting">Hola, {{ authStore.user?.firstName }}</span>
           <button class="navbar__button" type="button" @click="handleLogout">Cerrar sesión</button>
