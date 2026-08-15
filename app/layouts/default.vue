@@ -1,10 +1,16 @@
 <script setup lang="ts">
 const authStore = useAuthStore()
+const notificationsStore = useNotificationsStore()
 const router = useRouter()
 
 const canManageEvents = computed(
   () => authStore.user?.role === 'organizer' || authStore.user?.role === 'admin'
 )
+
+const notificationsLabel = computed(() => {
+  const unread = notificationsStore.unreadCount
+  return unread > 0 ? `🔔 Notificaciones (${unread})` : '🔔 Notificaciones'
+})
 
 async function handleLogout() {
   await authStore.logout()
@@ -26,6 +32,7 @@ async function handleLogout() {
             Mis actividades
           </NuxtLink>
           <NuxtLink to="/perfil" class="navbar__link">Perfil</NuxtLink>
+          <NuxtLink to="/notificaciones" class="navbar__link">{{ notificationsLabel }}</NuxtLink>
           <span class="navbar__greeting">Hola, {{ authStore.user?.firstName }}</span>
           <button class="navbar__button" type="button" @click="handleLogout">Cerrar sesión</button>
         </template>
