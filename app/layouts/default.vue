@@ -20,6 +20,8 @@ async function handleLogout() {
 
 <template>
   <div class="layout">
+    <OfflineBanner />
+
     <header class="navbar">
       <NuxtLink to="/" class="navbar__brand">CommunityHub</NuxtLink>
 

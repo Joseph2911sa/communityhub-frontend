@@ -42,6 +42,17 @@ const {
 
 const event = computed(() => eventData.value?.data?.event ?? null)
 
+// Un 404 real del backend y una falla de red (offline, sin esta
+// actividad en caché) llegan al mismo `error` de useAsyncData, pero
+// son casos distintos para quien lo lee — no es lo mismo "no existe"
+// que "no se pudo comprobar sin conexión".
+const notFoundMessage = computed(() => {
+  if (error.value && isNetworkError(error.value)) {
+    return 'No se pudo cargar esta actividad sin conexión. Solo las actividades que ya visitaste con internet están disponibles en modo offline.'
+  }
+  return 'Esta actividad no existe o fue eliminada.'
+})
+
 const canEditEvent = computed(() => {
   if (!event.value || !authStore.user) return false
   return event.value.organizer._id === authStore.user._id || authStore.user.role === 'admin'
@@ -168,7 +179,7 @@ async function handleToggleFavorite() {
     <p v-if="pending" class="status">Cargando actividad...</p>
 
     <div v-else-if="error || !event" class="not-found">
-      <p>Esta actividad no existe o fue eliminada.</p>
+      <p>{{ notFoundMessage }}</p>
       <NuxtLink to="/actividades">Volver a actividades</NuxtLink>
     </div>
 

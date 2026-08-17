@@ -8,7 +8,8 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "typecheck": "nuxi typecheck"
+    "typecheck": "nuxi typecheck",
+    "generate-icons": "node scripts/generate-icons.js"
   },
   "dependencies": {
     "@pinia/nuxt": "^1.0.2",
@@ -19,6 +20,8 @@
   },
   "devDependencies": {
     "@types/node": "^26.2.0",
+    "@vite-pwa/nuxt": "^1.1.1",
+    "sharp": "^0.35.3",
     "typescript": "^5.9.3",
     "vue-tsc": "^3.3.10"
   }
