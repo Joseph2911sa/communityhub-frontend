@@ -63,6 +63,8 @@ const eventFinished = computed(() => {
   return isEventFinished(event.value.date, event.value.time)
 })
 
+const eventCancelled = computed(() => event.value?.status === 'cancelled')
+
 // Copia local de cupos disponibles: arranca con el valor del backend y
 // se ajusta al inscribirse/cancelar sin tener que recargar la página.
 const spotsLeft = ref<number | null>(null)
@@ -120,6 +122,7 @@ const registerError = ref<string | null>(null)
 const registerButtonLabel = computed(() => {
   if (registerLoading.value) return 'Procesando...'
   if (isRegistered.value) return 'Cancelar inscripción'
+  if (eventCancelled.value) return 'Esta actividad fue cancelada por el organizador.'
   if (eventFinished.value) return 'Esta actividad ya finalizó'
   if ((spotsLeft.value ?? 0) <= 0) return 'Sin cupo disponible'
   return 'Inscribirme'
@@ -128,6 +131,7 @@ const registerButtonLabel = computed(() => {
 const registerButtonDisabled = computed(() => {
   if (registerLoading.value) return true
   if (isRegistered.value) return false
+  if (eventCancelled.value) return true
   if (eventFinished.value) return true
   if ((spotsLeft.value ?? 0) <= 0) return true
   return false

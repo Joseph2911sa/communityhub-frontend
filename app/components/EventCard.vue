@@ -13,6 +13,7 @@ interface EventCardData {
   location: string
   maxCapacity?: number
   organizer?: { firstName: string; lastName: string }
+  status: string
 }
 
 const props = defineProps<{
@@ -20,14 +21,16 @@ const props = defineProps<{
 }>()
 
 const finished = computed(() => isEventFinished(props.event.date, props.event.time))
+const cancelled = computed(() => props.event.status === 'cancelled')
 </script>
 
 <template>
   <article class="card">
     <h2 class="card__title">{{ event.title }}</h2>
-    <div v-if="event.category || finished" class="card__badges">
+    <div v-if="event.category || finished || cancelled" class="card__badges">
       <p v-if="event.category" class="card__category">{{ event.category.name }}</p>
-      <p v-if="finished" class="card__finished">Finalizada</p>
+      <p v-if="cancelled" class="card__cancelled">Cancelada</p>
+      <p v-else-if="finished" class="card__finished">Finalizada</p>
     </div>
 
     <dl class="card__details">
@@ -94,6 +97,16 @@ const finished = computed(() => isEventFinished(props.event.date, props.event.ti
   font-weight: 600;
   color: #f3f4f6;
   background-color: #6b7280;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+}
+
+.card__cancelled {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #b91c1c;
+  background-color: #fef2f2;
   padding: 0.2rem 0.6rem;
   border-radius: 999px;
 }
