@@ -23,6 +23,10 @@ definePageMeta({
         <h2>Usuarios</h2>
         <p>Gestiona roles y el estado de las cuentas registradas.</p>
       </NuxtLink>
+      <NuxtLink to="/admin/categories" class="admin-card">
+        <h2>Categorías</h2>
+        <p>Crea, edita y elimina las categorías de actividades.</p>
+      </NuxtLink>
     </div>
   </div>
 </template>
