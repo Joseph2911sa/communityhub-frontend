@@ -27,6 +27,10 @@ definePageMeta({
         <h2>Categorías</h2>
         <p>Crea, edita y elimina las categorías de actividades.</p>
       </NuxtLink>
+      <NuxtLink to="/admin/events" class="admin-card">
+        <h2>Actividades</h2>
+        <p>Modera actividades: cancela, reactiva o elimina cualquiera.</p>
+      </NuxtLink>
     </div>
   </div>
 </template>
