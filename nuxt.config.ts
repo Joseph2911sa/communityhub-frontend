@@ -18,8 +18,15 @@ export default defineNuxtConfig({
   },
   pwa: {
     registerType: 'autoUpdate',
-    devOptions: { enabled: true }, // para poder probar el SW en dev,
-                                    // sin necesitar build de producción
+    // El SW de dev cachea con CacheFirst rutas /_nuxt/@fs/... de Vite
+    // que NO son inmutables (a diferencia de los assets hasheados de
+    // producción) — rompe HMR y deja el navegador sirviendo módulos
+    // desincronizados en cada reinicio de npm run dev ("Failed to
+    // fetch dynamically imported module"). Toda la validación real de
+    // offline se hizo siempre contra npm run build + npm run preview
+    // (el comportamiento real de producción), nunca contra dev, así
+    // que desactivarlo acá no pierde ninguna capacidad de prueba.
+    devOptions: { enabled: false },
     manifest: {
       name: 'CommunityHub',
       short_name: 'CommunityHub',
