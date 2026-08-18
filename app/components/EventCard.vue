@@ -15,15 +15,20 @@ interface EventCardData {
   organizer?: { firstName: string; lastName: string }
 }
 
-defineProps<{
+const props = defineProps<{
   event: EventCardData
 }>()
+
+const finished = computed(() => isEventFinished(props.event.date, props.event.time))
 </script>
 
 <template>
   <article class="card">
     <h2 class="card__title">{{ event.title }}</h2>
-    <p v-if="event.category" class="card__category">{{ event.category.name }}</p>
+    <div v-if="event.category || finished" class="card__badges">
+      <p v-if="event.category" class="card__category">{{ event.category.name }}</p>
+      <p v-if="finished" class="card__finished">Finalizada</p>
+    </div>
 
     <dl class="card__details">
       <div class="card__row">
@@ -66,13 +71,29 @@ defineProps<{
   color: #111827;
 }
 
+.card__badges {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .card__category {
   display: inline-block;
-  align-self: flex-start;
   font-size: 0.8rem;
   font-weight: 600;
   color: #111827;
   background-color: #f3f4f6;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+}
+
+.card__finished {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #f3f4f6;
+  background-color: #6b7280;
   padding: 0.2rem 0.6rem;
   border-radius: 999px;
 }
