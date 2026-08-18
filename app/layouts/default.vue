@@ -33,6 +33,9 @@ async function handleLogout() {
           <NuxtLink v-if="canManageEvents" to="/mis-actividades" class="navbar__link">
             Mis actividades
           </NuxtLink>
+          <NuxtLink v-if="authStore.isAdmin" to="/admin" class="navbar__link">
+            Panel de administración
+          </NuxtLink>
           <NuxtLink to="/perfil" class="navbar__link">Perfil</NuxtLink>
           <NuxtLink to="/notificaciones" class="navbar__link">{{ notificationsLabel }}</NuxtLink>
           <span class="navbar__greeting">Hola, {{ authStore.user?.firstName }}</span>
