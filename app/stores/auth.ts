@@ -42,6 +42,15 @@ export const useAuthStore = defineStore('auth', () => {
   function clearSession() {
     user.value = null
     token.value = null
+
+    // El store de notificaciones es independiente del de auth — si no
+    // se limpia acá, las notificaciones del usuario que cerró sesión
+    // quedan en memoria y se le atribuyen visualmente al que inicie
+    // sesión después en la misma pestaña (defineStore setup-style, sin
+    // $reset() automático de Pinia, así que se limpia a mano).
+    const notificationsStore = useNotificationsStore()
+    notificationsStore.notifications = []
+    notificationsStore.unreadCount = 0
   }
 
   async function register(firstName: string, lastName: string, email: string, password: string) {
@@ -55,6 +64,18 @@ export const useAuthStore = defineStore('auth', () => {
       if (response.data) {
         user.value = response.data.user
         token.value = response.data.token
+        // El registro también deja la sesión iniciada — sin esto, el
+        // badge/página de notificaciones quedarían vacíos hasta el
+        // próximo F5 en vez de reflejar al usuario recién registrado.
+        // Si esto falla, no debe hacer fallar el registro en sí (mismo
+        // criterio que en app/plugins/auth.ts).
+        try {
+          const notificationsStore = useNotificationsStore()
+          await notificationsStore.fetchNotifications()
+        } catch {
+          // El registro ya fue exitoso; el badge queda vacío hasta el
+          // próximo intento.
+        }
       }
       return response
     } finally {
@@ -73,6 +94,19 @@ export const useAuthStore = defineStore('auth', () => {
       if (response.data) {
         user.value = response.data.user
         token.value = response.data.token
+        // Sin esto, un login dentro de la misma pestaña (sin recargar)
+        // deja las notificaciones del usuario anterior visibles bajo
+        // la sesión nueva — el plugin de auth.ts solo trae
+        // notificaciones al montar la app, no en cada login. Si esto
+        // falla, no debe hacer fallar el login en sí (mismo criterio
+        // que en app/plugins/auth.ts).
+        try {
+          const notificationsStore = useNotificationsStore()
+          await notificationsStore.fetchNotifications()
+        } catch {
+          // El login ya fue exitoso; el badge queda vacío hasta el
+          // próximo intento.
+        }
       }
       return response
     } finally {
