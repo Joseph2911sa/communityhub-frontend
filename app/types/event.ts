@@ -10,8 +10,10 @@ export interface Event {
   image?: string | null
   organizer: { _id: string; firstName: string; lastName: string; email: string }
   status: 'active' | 'cancelled' | 'finished'
-  // Solo vienen poblados en la respuesta de GET /events/:id (detalle),
-  // el listado (GET /events) no los incluye.
+  // Vienen poblados en GET /events/:id (detalle) y en GET /events con
+  // ?organizer=<id> (confirmado contra el backend real). El listado
+  // general sin filtrar por organizador no los incluye, de ahí que
+  // sigan siendo opcionales acá.
   confirmedCount?: number
   spotsLeft?: number
 }

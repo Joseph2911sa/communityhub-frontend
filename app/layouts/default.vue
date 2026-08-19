@@ -28,6 +28,7 @@ async function handleLogout() {
       <nav class="navbar__links">
         <NuxtLink to="/actividades" class="navbar__link">Actividades</NuxtLink>
         <template v-if="authStore.isAuthenticated">
+          <NuxtLink to="/dashboard" class="navbar__link">Dashboard</NuxtLink>
           <NuxtLink to="/mis-inscripciones" class="navbar__link">Mis inscripciones</NuxtLink>
           <NuxtLink to="/favoritos" class="navbar__link">Favoritos</NuxtLink>
           <NuxtLink v-if="canManageEvents" to="/mis-actividades" class="navbar__link">
