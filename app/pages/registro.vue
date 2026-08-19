@@ -1,6 +1,5 @@
 <script setup lang="ts">
 definePageMeta({
-  // Si ya hay sesión activa, no tiene sentido mostrar el formulario.
   middleware: [
     () => {
       const authStore = useAuthStore()
@@ -31,7 +30,6 @@ const errorMessage = ref<string | null>(null)
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-// --- Foto de perfil (opcional) ---
 const profilePicturePreview = ref<string | null>(null)
 const profilePictureError = ref<string | null>(null)
 let profilePictureFile: File | null = null

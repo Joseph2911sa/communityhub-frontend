@@ -71,8 +71,6 @@ export const useAuthStore = defineStore('auth', () => {
       const { apiFetch } = useApi()
       const response = await apiFetch<AuthResponse>('/auth/register', {
         method: 'POST',
-        // profilePicture solo se incluye si el usuario subió una foto --
-        // si no, se omite del body por completo (igual que hoy sin foto).
         body: profilePicture
           ? { firstName, lastName, email, password, profilePicture }
           : { firstName, lastName, email, password }
@@ -89,8 +87,6 @@ export const useAuthStore = defineStore('auth', () => {
           const notificationsStore = useNotificationsStore()
           await notificationsStore.fetchNotifications()
         } catch {
-          // El registro ya fue exitoso; el badge queda vacío hasta el
-          // próximo intento.
         }
       }
       return response
@@ -120,8 +116,6 @@ export const useAuthStore = defineStore('auth', () => {
           const notificationsStore = useNotificationsStore()
           await notificationsStore.fetchNotifications()
         } catch {
-          // El login ya fue exitoso; el badge queda vacío hasta el
-          // próximo intento.
         }
       }
       return response

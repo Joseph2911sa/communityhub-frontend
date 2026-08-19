@@ -46,7 +46,6 @@ const { apiFetch } = useApi()
 const authStore = useAuthStore()
 const notificationsStore = useNotificationsStore()
 
-// --- Base (todos los roles) ---
 const { data: registrationsData, pending: registrationsPending } = await useAsyncData(
   'dashboard-registrations',
   () => apiFetch<RegistrationsResponse>('/users/me/registrations')

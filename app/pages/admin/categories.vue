@@ -41,7 +41,6 @@ watch(
   { immediate: true }
 )
 
-// --- Crear categoría ---
 const newName = ref('')
 const newDescription = ref('')
 const createLoading = ref(false)
@@ -67,7 +66,6 @@ async function handleCreate() {
   }
 }
 
-// --- Edición inline (nombre/descripción) ---
 const rowLoadingId = ref<string | null>(null)
 const deletingId = ref<string | null>(null)
 const rowErrors = ref<Record<string, string>>({})

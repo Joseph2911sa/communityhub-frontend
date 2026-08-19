@@ -36,7 +36,6 @@ export const useNotificationsStore = defineStore('notifications', () => {
       method: 'PATCH'
     })
 
-    // Se actualiza localmente en vez de volver a pedir toda la lista.
     const notification = notifications.value.find((n) => n._id === id)
     if (notification && !notification.read) {
       notification.read = true

@@ -44,7 +44,6 @@ const registeredAt = computed(() => {
   return createdAt ? registeredAtFormatter.format(new Date(createdAt)) : ''
 })
 
-// --- Foto de perfil (edición) ---
 const showPictureInput = ref(false)
 const picturePreview = ref<string | null>(null)
 const pictureError = ref<string | null>(null)

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 definePageMeta({
-  // Si ya hay sesión activa, no tiene sentido mostrar el formulario.
   middleware: [
     () => {
       const authStore = useAuthStore()
