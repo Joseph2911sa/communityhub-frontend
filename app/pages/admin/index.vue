@@ -31,6 +31,10 @@ definePageMeta({
         <h2>Actividades</h2>
         <p>Modera actividades: cancela, reactiva o elimina cualquiera.</p>
       </NuxtLink>
+      <NuxtLink to="/admin/statistics" class="admin-card">
+        <h2>Estadísticas</h2>
+        <p>Consulta los números generales de la plataforma.</p>
+      </NuxtLink>
     </div>
   </div>
 </template>
