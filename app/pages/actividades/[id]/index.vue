@@ -379,8 +379,8 @@ async function handleToggleFavorite() {
 .actions__group button {
   padding: 0.65rem 1.25rem;
   border-radius: 6px;
-  border: 1px solid #111827;
-  background-color: #111827;
+  border: 1px solid var(--color-accent);
+  background-color: var(--color-accent);
   color: #ffffff;
   font-size: 0.95rem;
   cursor: pointer;
@@ -388,7 +388,7 @@ async function handleToggleFavorite() {
 }
 
 .actions__group button:hover:not(:disabled) {
-  background-color: #1f2937;
+  filter: brightness(0.92);
 }
 
 .actions__group button:disabled {

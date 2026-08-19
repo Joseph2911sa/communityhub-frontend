@@ -1,0 +1,12 @@
+:root {
+  --color-bg: #FAF7F2;
+  --color-surface: #FFFFFF;
+  --color-text: #292524;
+  --color-text-secondary: #78716C;
+  --color-border: #E7E2D9;
+  --color-accent: #3D7A6E;
+  --color-accent-bg: #EAF1EF;
+  --radius-sm: 8px;
+  --radius-lg: 12px;
+  --shadow-card: 0 1px 3px rgba(41, 37, 36, 0.06);
+}

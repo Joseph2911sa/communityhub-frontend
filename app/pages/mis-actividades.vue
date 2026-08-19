@@ -131,7 +131,7 @@ async function handleDelete(event: Event) {
 .create-link {
   padding: 0.5rem 0.9rem;
   border-radius: 6px;
-  background-color: #111827;
+  background-color: var(--color-accent);
   color: #ffffff;
   text-decoration: none;
   font-size: 0.9rem;
@@ -140,7 +140,7 @@ async function handleDelete(event: Event) {
 }
 
 .create-link:hover {
-  background-color: #1f2937;
+  filter: brightness(0.92);
 }
 
 .status {

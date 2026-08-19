@@ -4,6 +4,7 @@ export default defineNuxtConfig({
   devServer: {
     port: 3001
   },
+  css: ['~/assets/css/variables.css'],
   modules: ['@pinia/nuxt', '@vite-pwa/nuxt'],
   runtimeConfig: {
     public: {
@@ -32,8 +33,8 @@ export default defineNuxtConfig({
       description: 'Plataforma comunitaria de actividades y eventos',
       start_url: '/',
       display: 'standalone',
-      theme_color: '#0f172a',
-      background_color: '#ffffff',
+      theme_color: '#3D7A6E',
+      background_color: '#FAF7F2',
       icons: [
         { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' },
         { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png' },

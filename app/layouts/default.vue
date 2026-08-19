@@ -75,7 +75,7 @@ async function handleLogout() {
   flex-direction: column;
   font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
   color: #1f2937;
-  background-color: #f9fafb;
+  background-color: var(--color-bg);
 }
 
 .navbar {
@@ -109,17 +109,19 @@ async function handleLogout() {
   transition: background-color 0.15s ease;
 }
 
-.navbar__link:hover {
-  background-color: #f3f4f6;
+.navbar__link:hover,
+.navbar__link.router-link-active {
+  background-color: var(--color-accent-bg);
+  color: var(--color-accent);
 }
 
 .navbar__link--primary {
-  background-color: #111827;
+  background-color: var(--color-accent);
   color: #ffffff;
 }
 
 .navbar__link--primary:hover {
-  background-color: #1f2937;
+  filter: brightness(0.92);
 }
 
 .navbar__greeting {
@@ -134,8 +136,10 @@ async function handleLogout() {
   transition: background-color 0.15s ease;
 }
 
-.navbar__greeting:hover {
-  background-color: #f3f4f6;
+.navbar__greeting:hover,
+.navbar__greeting.router-link-active {
+  background-color: var(--color-accent-bg);
+  color: var(--color-accent);
 }
 
 .navbar__button {

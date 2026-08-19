@@ -66,7 +66,8 @@ const cancelled = computed(() => props.event.status === 'cancelled')
   padding: 1.25rem;
   background-color: #ffffff;
   border: 1px solid #e5e7eb;
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
 }
 
 .card__title {
@@ -85,8 +86,8 @@ const cancelled = computed(() => props.event.status === 'cancelled')
   display: inline-block;
   font-size: 0.8rem;
   font-weight: 600;
-  color: #111827;
-  background-color: #f3f4f6;
+  color: var(--color-accent);
+  background-color: var(--color-accent-bg);
   padding: 0.2rem 0.6rem;
   border-radius: 999px;
 }
@@ -140,12 +141,12 @@ const cancelled = computed(() => props.event.status === 'cancelled')
   align-self: flex-start;
   font-size: 0.9rem;
   font-weight: 600;
-  color: #111827;
+  color: var(--color-accent);
   text-decoration: none;
-  border-bottom: 1px solid #111827;
+  border-bottom: 1px solid var(--color-accent);
 }
 
 .card__link:hover {
-  color: #1f2937;
+  filter: brightness(0.85);
 }
 </style>

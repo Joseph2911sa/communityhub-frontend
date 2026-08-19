@@ -233,7 +233,7 @@ async function handleDelete(category: Category) {
   padding: 0.6rem 1rem;
   border-radius: 6px;
   border: none;
-  background-color: #111827;
+  background-color: var(--color-accent);
   color: #ffffff;
   font-size: 0.9rem;
   font-weight: 600;
@@ -242,7 +242,7 @@ async function handleDelete(category: Category) {
 }
 
 .create-form button:hover:not(:disabled) {
-  background-color: #1f2937;
+  filter: brightness(0.92);
 }
 
 .create-form button:disabled {
