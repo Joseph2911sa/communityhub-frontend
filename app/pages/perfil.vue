@@ -43,11 +43,72 @@ const registeredAt = computed(() => {
   const createdAt = authStore.user?.createdAt
   return createdAt ? registeredAtFormatter.format(new Date(createdAt)) : ''
 })
+
+// --- Foto de perfil (edición) ---
+const showPictureInput = ref(false)
+const picturePreview = ref<string | null>(null)
+const pictureError = ref<string | null>(null)
+const pictureLoading = ref(false)
+
+async function handleProfilePictureChange(event: Event) {
+  const input = event.target as HTMLInputElement
+  const file = input.files?.[0] ?? null
+  if (!file) return
+
+  pictureError.value = null
+
+  const validationError = validateProfilePictureFile(file)
+  if (validationError) {
+    pictureError.value = validationError
+    input.value = ''
+    return
+  }
+
+  picturePreview.value = URL.createObjectURL(file)
+  pictureLoading.value = true
+  try {
+    const profilePicture = await fileToBase64(file)
+    // authStore.user se actualiza dentro de updateProfile() si tiene
+    // éxito -- no hace falta releer/recargar la página para reflejarlo.
+    await authStore.updateProfile({ profilePicture })
+    showPictureInput.value = false
+  } catch (error) {
+    // Cubre tanto el 400 (validación del backend, ej. si por algún
+    // motivo pasó la validación de cliente pero no la de allá) como
+    // cualquier otro error de la petición.
+    pictureError.value = (error as Error).message
+  } finally {
+    pictureLoading.value = false
+    picturePreview.value = null
+    input.value = ''
+  }
+}
 </script>
 
 <template>
   <div class="perfil">
     <h1>Mi perfil</h1>
+
+    <div v-if="authStore.user" class="avatar-section">
+      <UserAvatar
+        :profile-picture="picturePreview ?? authStore.user.profilePicture"
+        :full-name="fullName"
+        :size="80"
+      />
+      <div class="avatar-section__actions">
+        <button type="button" :disabled="pictureLoading" @click="showPictureInput = !showPictureInput">
+          {{ pictureLoading ? 'Guardando...' : 'Cambiar foto' }}
+        </button>
+        <input
+          v-if="showPictureInput"
+          type="file"
+          accept="image/png,image/jpeg,image/gif,image/webp"
+          :disabled="pictureLoading"
+          @change="handleProfilePictureChange"
+        />
+        <p v-if="pictureError" class="field-error">{{ pictureError }}</p>
+      </div>
+    </div>
 
     <dl v-if="authStore.user" class="details">
       <div class="details__row">
@@ -109,5 +170,44 @@ const registeredAt = computed(() => {
   margin: 0;
   color: #1f2937;
   font-weight: 600;
+}
+
+.avatar-section {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.avatar-section__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.avatar-section__actions button {
+  align-self: flex-start;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  background-color: #ffffff;
+  color: #374151;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.avatar-section__actions button:hover:not(:disabled) {
+  background-color: #f3f4f6;
+}
+
+.avatar-section__actions button:disabled {
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.field-error {
+  color: #b91c1c;
+  font-size: 0.85rem;
+  max-width: 260px;
 }
 </style>

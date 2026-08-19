@@ -7,6 +7,13 @@ const canManageEvents = computed(
   () => authStore.user?.role === 'organizer' || authStore.user?.role === 'admin'
 )
 
+// User no tiene un campo fullName propio (solo firstName/lastName) --
+// mismo criterio que ya usa perfil.vue.
+const fullName = computed(() => {
+  const user = authStore.user
+  return user ? `${user.firstName} ${user.lastName}` : ''
+})
+
 const notificationsLabel = computed(() => {
   const unread = notificationsStore.unreadCount
   return unread > 0 ? `🔔 Notificaciones (${unread})` : '🔔 Notificaciones'
@@ -37,9 +44,15 @@ async function handleLogout() {
           <NuxtLink v-if="authStore.isAdmin" to="/admin" class="navbar__link">
             Panel de administración
           </NuxtLink>
-          <NuxtLink to="/perfil" class="navbar__link">Perfil</NuxtLink>
           <NuxtLink to="/notificaciones" class="navbar__link">{{ notificationsLabel }}</NuxtLink>
-          <span class="navbar__greeting">Hola, {{ authStore.user?.firstName }}</span>
+          <NuxtLink to="/perfil" class="navbar__greeting">
+            <UserAvatar
+              :profile-picture="authStore.user?.profilePicture ?? null"
+              :full-name="fullName"
+              :size="32"
+            />
+            Hola, {{ authStore.user?.firstName }}
+          </NuxtLink>
           <button class="navbar__button" type="button" @click="handleLogout">Cerrar sesión</button>
         </template>
         <template v-else>
@@ -110,8 +123,19 @@ async function handleLogout() {
 }
 
 .navbar__greeting {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
   font-size: 0.95rem;
   color: #374151;
+  text-decoration: none;
+  transition: background-color 0.15s ease;
+}
+
+.navbar__greeting:hover {
+  background-color: #f3f4f6;
 }
 
 .navbar__button {

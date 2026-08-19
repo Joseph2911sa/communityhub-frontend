@@ -31,6 +31,35 @@ const errorMessage = ref<string | null>(null)
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
+// --- Foto de perfil (opcional) ---
+const profilePicturePreview = ref<string | null>(null)
+const profilePictureError = ref<string | null>(null)
+let profilePictureFile: File | null = null
+
+function handleProfilePictureChange(event: Event) {
+  const input = event.target as HTMLInputElement
+  const file = input.files?.[0] ?? null
+  profilePictureError.value = null
+
+  if (!file) {
+    profilePictureFile = null
+    profilePicturePreview.value = null
+    return
+  }
+
+  const validationError = validateProfilePictureFile(file)
+  if (validationError) {
+    profilePictureError.value = validationError
+    profilePictureFile = null
+    profilePicturePreview.value = null
+    input.value = ''
+    return
+  }
+
+  profilePictureFile = file
+  profilePicturePreview.value = URL.createObjectURL(file)
+}
+
 // Validación en el cliente antes de gastar una llamada al backend.
 function validate(): boolean {
   const errors: FieldErrors = {}
@@ -60,8 +89,21 @@ async function handleSubmit() {
   }
 
   try {
+    // Si el usuario eligió una foto, se convierte a base64 recién acá
+    // (no antes) -- así no se gasta tiempo convirtiendo un archivo que
+    // después no se llega a enviar por otro error de validación.
+    const profilePicture = profilePictureFile
+      ? await fileToBase64(profilePictureFile)
+      : undefined
+
     // El registro ya deja la sesión iniciada según responde el backend.
-    await authStore.register(firstName.value, lastName.value, email.value, password.value)
+    await authStore.register(
+      firstName.value,
+      lastName.value,
+      email.value,
+      password.value,
+      profilePicture
+    )
     router.push('/')
   } catch (error) {
     errorMessage.value = (error as Error).message
@@ -96,6 +138,18 @@ async function handleSubmit() {
         <label for="password">Contraseña</label>
         <input id="password" v-model="password" type="password" autocomplete="new-password" />
         <p v-if="fieldErrors.password" class="field-error">{{ fieldErrors.password }}</p>
+      </div>
+
+      <div class="field">
+        <label for="profilePicture">Foto de perfil (opcional)</label>
+        <img v-if="profilePicturePreview" :src="profilePicturePreview" alt="Vista previa" class="avatar-preview" />
+        <input
+          id="profilePicture"
+          type="file"
+          accept="image/png,image/jpeg,image/gif,image/webp"
+          @change="handleProfilePictureChange"
+        />
+        <p v-if="profilePictureError" class="field-error">{{ profilePictureError }}</p>
       </div>
 
       <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
@@ -159,6 +213,15 @@ async function handleSubmit() {
 .field-error {
   color: #b91c1c;
   font-size: 0.85rem;
+}
+
+.avatar-preview {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  align-self: flex-start;
+  border: 1px solid #e5e7eb;
 }
 
 .error {

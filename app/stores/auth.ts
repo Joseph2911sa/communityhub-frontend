@@ -17,6 +17,12 @@ interface MeResponse {
   }
 }
 
+interface UpdateProfilePayload {
+  firstName?: string
+  lastName?: string
+  profilePicture?: string | null
+}
+
 export const useAuthStore = defineStore('auth', () => {
   // useCookie es SSR-safe (a diferencia de localStorage/sessionStorage),
   // así el token sobrevive un refresh de página tanto en cliente como
@@ -53,13 +59,23 @@ export const useAuthStore = defineStore('auth', () => {
     notificationsStore.unreadCount = 0
   }
 
-  async function register(firstName: string, lastName: string, email: string, password: string) {
+  async function register(
+    firstName: string,
+    lastName: string,
+    email: string,
+    password: string,
+    profilePicture?: string
+  ) {
     loading.value = true
     try {
       const { apiFetch } = useApi()
       const response = await apiFetch<AuthResponse>('/auth/register', {
         method: 'POST',
-        body: { firstName, lastName, email, password }
+        // profilePicture solo se incluye si el usuario subió una foto --
+        // si no, se omite del body por completo (igual que hoy sin foto).
+        body: profilePicture
+          ? { firstName, lastName, email, password, profilePicture }
+          : { firstName, lastName, email, password }
       })
       if (response.data) {
         user.value = response.data.user
@@ -142,6 +158,28 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  // Autoservicio (PUT /users/me): solo firstName/lastName/profilePicture.
+  // A diferencia de admin/users.vue (que gestiona role/isActive de OTROS
+  // usuarios vía PUT /users/:id), esto es el propio usuario editando su
+  // perfil -- el backend ya ignora role/isActive si vienen colados acá,
+  // pero ni siquiera se los mandamos desde este composable.
+  async function updateProfile(payload: UpdateProfilePayload) {
+    loading.value = true
+    try {
+      const { apiFetch } = useApi()
+      const response = await apiFetch<MeResponse>('/users/me', {
+        method: 'PUT',
+        body: payload
+      })
+      if (response.data) {
+        user.value = response.data.user
+      }
+      return response
+    } finally {
+      loading.value = false
+    }
+  }
+
   return {
     user,
     token,
@@ -153,6 +191,7 @@ export const useAuthStore = defineStore('auth', () => {
     register,
     login,
     logout,
-    fetchMe
+    fetchMe,
+    updateProfile
   }
 })
